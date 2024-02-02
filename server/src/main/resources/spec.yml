@@ -1,0 +1,174 @@
+openapi: 3.0.0
+info:
+  title: obsidian API
+  version: 0.0.0
+
+tags:
+  - name: Auth
+    description: Authentication and session management
+
+
+paths:
+  # *******************************************************************************
+  #                           Account
+  # *******************************************************************************
+  /api/getAccount:
+    get:
+      operationId: getAccount
+      tags:
+        - Account
+      responses:
+        '200':
+          description: Result
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AccountData'
+
+  /api/getFeatures:
+    post:
+      operationId: getFeatures
+      tags:
+        - Account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountData'
+      responses:
+        '200':
+          description: Result
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Feature'
+
+  # *******************************************************************************
+  #                           Auth
+  # *******************************************************************************
+  /api/register-account:
+    post:
+      operationId: registerAccount
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountRegisterData'
+      responses:
+        '200':
+          description: Result
+
+  /api/login:
+    post:
+      #      security: [ ]
+      #      summary: Login
+      operationId: login
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequestData'
+      responses:
+        '200':
+          description: Result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionInfoData'
+
+  /api/logout:
+    post:
+      #      summary: Logout
+      operationId: logout
+      tags:
+        - Auth
+      responses:
+        '200':
+          description: Result
+
+
+components:
+  schemas:
+    AccountRegisterData:
+      properties:
+        displayName:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+
+    LoginRequestData:
+      properties:
+        login:
+          type: string
+        password:
+          type: string
+
+    Feature:
+      properties:
+        id:
+          type: integer
+          format: int64
+        feature:
+          type: string
+
+
+    SessionInfoData:
+      properties:
+        sessionId:
+          type: string
+        accountId:
+          type: integer
+          format: int64
+        superAdmin:
+          type: boolean
+        permission:
+          type: string
+        features:
+          type: array
+          items:
+            $ref: "#/components/schemas/Feature"
+        displayName:
+          type: string
+
+    AccountData:
+      properties:
+        id:
+          type: integer
+          format: int64
+        displayName:
+          type: string
+        active:
+          type: boolean
+        permission:
+          type: string
+        confirmed:
+          type: boolean
+
+#    FType:
+#      type: string
+#      enum:
+#        - user
+#        - admin
+#        - superAdmin
+#        - reception
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+
+security:
+  - bearerAuth: [ ]

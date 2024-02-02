@@ -1,0 +1,30 @@
+defaults:
+  firstUser:
+    username: 1111@server.com
+    password: 1111
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/graph_ai
+    username: postgres
+    password: JustOleg1!
+
+  jpa:
+    show-sql: false
+
+#  mail:
+#    host: smtp.gmail.com
+#    port: 587
+#    username: gerbylev.oleg@gmail.com # логин от учётки Yandex
+#    password: yyro jqjy zngf npdo # специальный пароль для приложения
+#    test-connection: true # проверка подключения при старте приложения
+#    properties:
+#      mail:
+#        smtp:
+#          auth: true
+#          ssl:
+#            enable: true
+#    sender: # отправитель письма (его почта и имя)
+#      email: your_name@yandex.ru
+#      text: no-reply
