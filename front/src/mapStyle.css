@@ -1,0 +1,17 @@
+.leaflet-control-attribution.leaflet-control{
+    display: none;
+}
+
+.leaflet-marker-icon .leaflet-zoom-animated .leaflet-interactive{
+    background-color: red;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    margin-left: -10px;
+    margin-top: -10px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border: 2px solid #fff;
+}
