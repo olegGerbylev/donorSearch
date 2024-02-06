@@ -1,5 +1,8 @@
 package donor
 
+import donor.dao.Account
+import donor.dao.AccountRepository
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
@@ -7,5 +10,6 @@ import org.springframework.boot.runApplication
 class DonorApplication
 
 fun main(args: Array<String>) {
+
     runApplication<DonorApplication>(*args)
 }

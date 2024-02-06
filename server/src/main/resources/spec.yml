@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  title: obsidian API
+  title: donor API
   version: 0.0.0
 
 tags:
@@ -12,41 +12,41 @@ paths:
   # *******************************************************************************
   #                           Account
   # *******************************************************************************
-  /api/getAccount:
-    get:
-      operationId: getAccount
-      tags:
-        - Account
-      responses:
-        '200':
-          description: Result
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/AccountData'
-
-  /api/getFeatures:
-    post:
-      operationId: getFeatures
-      tags:
-        - Account
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AccountData'
-      responses:
-        '200':
-          description: Result
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Feature'
+  #  /api/getAccount:
+  #    get:
+  #      operationId: getAccount
+  #      tags:
+  #        - Account
+  #      responses:
+  #        '200':
+  #          description: Result
+  #          content:
+  #            application/json:
+  #              schema:
+  #                type: array
+  #                items:
+  #                  $ref: '#/components/schemas/AccountData'
+  #
+  #  /api/getFeatures:
+  #    post:
+  #      operationId: getFeatures
+  #      tags:
+  #        - Account
+  #      requestBody:
+  #        required: true
+  #        content:
+  #          application/json:
+  #            schema:
+  #              $ref: '#/components/schemas/AccountData'
+  #      responses:
+  #        '200':
+  #          description: Result
+  #          content:
+  #            application/json:
+  #              schema:
+  #                type: array
+  #                items:
+  #                  $ref: '#/components/schemas/Feature'
 
   # *******************************************************************************
   #                           Auth
@@ -65,11 +65,33 @@ paths:
       responses:
         '200':
           description: Result
+  /api/checkSession:
+    post:
+      operationId: checkSession
+      tags:
+        - Auth
+      responses:
+        '200':
+          description: Result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionInfoData'
+
+  /api/confirm-account/{confirmToken}:
+    get:
+      operationId: confirmAccount
+      parameters:
+        - $ref: '#/components/parameters/confirmToken'
+      tags:
+        - Auth
+      responses:
+        '200':
+          description: Result
+
 
   /api/login:
     post:
-      #      security: [ ]
-      #      summary: Login
       operationId: login
       tags:
         - Auth
@@ -89,7 +111,6 @@ paths:
 
   /api/logout:
     post:
-      #      summary: Logout
       operationId: logout
       tags:
         - Auth
@@ -97,8 +118,102 @@ paths:
         '200':
           description: Result
 
+  # *******************************************************************************
+  #                           Map
+  # *******************************************************************************
+
+  /api/getAllPoint:
+    get:
+      operationId: getAllPointer
+      tags:
+        - Map
+      responses:
+        '200':
+          description: Result
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MapPointData'
+
+  /api/getFullInfo:
+    post:
+      operationId: getFullInfo
+      tags:
+        - Map
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MapPointData'
+      responses:
+        '200':
+          description: Result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MapPointerFullInfoData'
+
+  /api/mapPoint:
+    post:
+      operationId: addPoint
+      tags:
+        - Map
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MapPointerFullInfoData'
+      responses:
+        '200':
+          description: Result
+    put:
+      operationId: editPoint
+      tags:
+        - Map
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MapPointerFullInfoData'
+      responses:
+        '200':
+          description: Result
+
+  /api/deleteMapPoint:
+    post:
+      operationId: deletePoint
+      tags:
+        - Map
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MapPointData'
+      responses:
+        '200':
+          description: Result
+
+  # *******************************************************************************
+  #                           Form
+  # *******************************************************************************
+
 
 components:
+  parameters:
+    confirmToken:
+      name: confirmToken
+      in: path
+      description: confirmToken.
+      required: true
+      schema:
+        type: string
+
   schemas:
     AccountRegisterData:
       properties:
@@ -114,6 +229,37 @@ components:
         login:
           type: string
         password:
+          type: string
+
+    MapPointData:
+      properties:
+        id:
+          type: integer
+          format: int64
+        tal:
+          type: number
+          format: double
+        lng:
+          type: number
+          format: double
+
+    MapPointerFullInfoData:
+      properties:
+        mapPoint:
+          $ref: "#/components/schemas/MapPointData"
+        name:
+          type: string
+        address:
+          type: string
+        phone:
+          type: string
+        info:
+          type: string
+        important:
+          type: string
+        time:
+          type: string
+        photo:
           type: string
 
     Feature:
@@ -136,10 +282,10 @@ components:
           type: boolean
         permission:
           type: string
-        features:
-          type: array
-          items:
-            $ref: "#/components/schemas/Feature"
+        #        features:
+        #          type: array
+        #          items:
+        #            $ref: "#/components/schemas/Feature"
         displayName:
           type: string
 
@@ -150,6 +296,8 @@ components:
           format: int64
         displayName:
           type: string
+        superAdmin:
+          type: boolean
         active:
           type: boolean
         permission:
@@ -157,13 +305,13 @@ components:
         confirmed:
           type: boolean
 
-#    FType:
-#      type: string
-#      enum:
-#        - user
-#        - admin
-#        - superAdmin
-#        - reception
+  #    FType:
+  #      type: string
+  #      enum:
+  #        - user
+  #        - admin
+  #        - superAdmin
+  #        - reception
 
   securitySchemes:
     bearerAuth:

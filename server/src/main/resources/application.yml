@@ -1,14 +1,33 @@
+server:
+  test: true
+  externalUrl: http://localhost:3000
+  externalFormUrl: http://localhost:8080/?token=
+
 defaults:
   firstUser:
     username: 1111@server.com
     password: 1111
 
 spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${email}
+    password: ${email_password}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/graph_ai
-    username: postgres
-    password: JustOleg1!
+    url: jdbc:postgresql://localhost:5432/donorsearch
+    username: ${MY_DB_UN}
+    password: ${MY_DB_PW}
 
   jpa:
     show-sql: false
+

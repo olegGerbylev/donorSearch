@@ -1,0 +1,28 @@
+@import "../../style";
+
+.input{
+  margin-top: 10px;
+  width: 100%;
+  marginBottom: 10px;
+}
+
+.inputLabel{
+    color: rgb(78, 83, 85);
+    font-family: Inter, Arial, sans-serif;
+    margin-left: 10px;
+}
+
+.inputContainer{
+  display: flex;
+  align-items: center;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.realInput{
+  border: none;
+  background-color: transparent;
+  color: rgb(78,83,85);
+  outline: none;
+}

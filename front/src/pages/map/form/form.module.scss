@@ -1,0 +1,55 @@
+.form{
+  margin-top: 20px;
+  padding: 0 40px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 10px;
+}
+//
+//.important{
+//  height: 60px;
+//}
+
+.customFileUpload {
+  height: 40px;
+  font-family: Inter, Arial, sans-serif;
+  //margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background-color: red;
+  color: white;
+  border-radius: 5px;
+  input{
+    display: none;
+  }
+}
+
+.photo{
+  grid-column: span 2;
+  display: flex;
+  justify-content: center;
+
+  img{
+    max-width: 100%;
+    max-height: 300px;
+  }
+}
+
+.submitButton{
+    cursor: pointer;
+    background-color: white;
+    font-weight: 900;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #f73232;
+    border-radius: 5px;
+    font-weight: 900;
+    border: #f73232 solid 1px;
+}
+.submitButton:hover{
+  background-color: red;
+  color: white;
+}
