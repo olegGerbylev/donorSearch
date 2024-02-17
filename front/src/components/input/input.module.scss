@@ -1,28 +1,40 @@
-@import "../../style";
-
-.input{
-  margin-top: 10px;
-  width: 100%;
-  marginBottom: 10px;
-}
-
-.inputLabel{
-    color: rgb(78, 83, 85);
-    font-family: Inter, Arial, sans-serif;
-    margin-left: 10px;
-}
-
 .inputContainer{
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.label{
+  margin-left: 10px;
+  color: black;
+  font-family: Inter,Arial,sans-serif;
+}
+
+.error{
+  margin-left: 10px;
+  color: #f73232;
+  font-size: 14px;
+}
+
+.inputStyle{
   display: flex;
   align-items: center;
+  height: 25px;
+  background-color: white;
   border: 1px solid lightgray;
   border-radius: 5px;
   padding: 5px;
 }
 
-.realInput{
+.input{
+  //margin-top: 10px;
+  //width: 100%;
+  //marginBottom: 10px;
   border: none;
+  width: 100%;
   background-color: transparent;
-  color: rgb(78,83,85);
   outline: none;
+  color: black;
+  font-size: 14px;
 }
+
+

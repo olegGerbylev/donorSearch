@@ -14,16 +14,16 @@ class AccountApiValidator(
 
     fun validateRegisterAccount(data: AccountRegisterData) {
         Validator(data) {
-            length("email", min = 4, max = 64)
+            length("login", min = 4, max = 64)
             length("password", min = 6, max = 64)
             length("displayName", min = 3, max = 128)
-            email("email")
+            email("login")
         }
         Validator(data) {
-            if (accounts.findByLogin(data.email!!) != null) {
+            if (accounts.findByLogin(data.login!!) != null) {
                 error("ownerEmail", ApiErrorCode.EMAIL_ALREADY_EXIST)
             }
-            if (data.email.contains(Regex("\\+.*gmail.com", RegexOption.IGNORE_CASE))) {
+            if (data.login.contains(Regex("\\+.*gmail.com", RegexOption.IGNORE_CASE))) {
                 error("ownerEmail", ApiErrorCode.EMAIL_ALIASED)
             }
         }

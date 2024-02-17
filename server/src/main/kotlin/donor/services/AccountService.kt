@@ -8,6 +8,7 @@ import donor.endpoints.errors.WebException
 import donor.utils.ClockHolder
 import org.apache.commons.lang3.RandomStringUtils
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.security.crypto.bcrypt.BCrypt
 import org.springframework.stereotype.Service
 import java.time.Duration
@@ -19,7 +20,7 @@ class AccountService(
     private val accounts: AccountRepository,
     private val confirmations: TokenConfirmationRepository,
     private val mailService: EmailService,
-//    @Value("\${server.externalUrl}") private val externalUrl: String,
+    @Value("\${server.externalUrl}") private val externalUrl: String,
 //    @Value("\${mail.contactMail}") private val contactMail: String,
 //    @Value("\${server.test}") private val testMode: Boolean,
 ) {
@@ -39,10 +40,9 @@ class AccountService(
             displayName = accountRegisterData.displayName,
             active = true,
             confirmed = confirmed,
-            superAdmin = false,
-            permission = "admin",
+            role = "admin",
         )
-        val acc = accountData.toDBData(email = accountRegisterData.email!!, password = encryptPassword(accountRegisterData.password!!))
+        val acc = accountData.toDBData(email = accountRegisterData.login!!, password = encryptPassword(accountRegisterData.password!!), photo = null)
         accounts.save(acc)
         return acc
     }
@@ -56,13 +56,13 @@ class AccountService(
         val expireTime =
             ClockHolder.instantNow().plus(Duration.ofDays(1))
         val confirmation =
-            TokenConfirmation(token = token, id = account.id, expireTime = expireTime)
+            TokenConfirmation(token = token, id = account.id, deletedTs = expireTime)
         confirmations.save(confirmation)
         try {
             val emailTo = account.email
 
             val title: String = "Подтверждение почтового адреса"
-            val body: String = "http://localhost:8080/api/confirm-account/$token"
+            val body: String = "$externalUrl/registration-completed/$token"
             mailService.sendSimpleMessage(emailTo, title, body)
 
         } catch (e: Exception) {
@@ -71,7 +71,7 @@ class AccountService(
 
     fun confirmAccount(token: String){
         val tokenConfirmation = confirmations.findByToken(token) ?: throw WebException(ApiErrorCode.ROTTEN_TOKEN)
-        if (tokenConfirmation.expireTime < ClockHolder.instantNow()){
+        if (tokenConfirmation.deletedTs < ClockHolder.instantNow()){
             confirmations.delete(tokenConfirmation)
             throw WebException(ApiErrorCode.ROTTEN_TOKEN)
         }
@@ -80,6 +80,14 @@ class AccountService(
             accounts.save(updateAccount)
         }
         confirmations.delete(tokenConfirmation)
+    }
+
+    @Scheduled(cron = "0 0 0 * * *")
+    fun jobCleanConfirmationsExpired(){
+        val ucsExpired = confirmations.findExpired(ClockHolder.instantNow(), 100)
+        if (ucsExpired.isEmpty()) return
+        accounts.deleteAllById(ucsExpired.map { it.id })
+        confirmations.deleteAll(ucsExpired)
     }
 
 

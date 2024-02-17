@@ -12,10 +12,14 @@ data class TokenConfirmation (
     @Id
     val id: Long,
     val token: String,
-    val expireTime: Instant
+    val deletedTs: Instant
     )
 
 interface TokenConfirmationRepository: JpaRepository<TokenConfirmation, Long>{
     @Query("SELECT * FROM token_confirmation WHERE token = :token", nativeQuery = true)
     fun findByToken(token: String): TokenConfirmation?
+
+    @Query("SELECT * FROM token_confirmation WHERE expire_time <= :currentTime LIMIT :limit", nativeQuery = true)
+    fun findExpired(currentTime: Instant, limit: Int): List<TokenConfirmation>
+
 }

@@ -45,6 +45,7 @@ $themes: (
 }
 
 @mixin mobile {
+  font-family: Inter,Arial,sans-serif;
   @media (max-width: 480px) {
     @content;
   }
@@ -54,6 +55,7 @@ $themes: (
     @content;
   }
 }
+
 
 
 body{

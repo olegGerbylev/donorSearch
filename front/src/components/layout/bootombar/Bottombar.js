@@ -1,45 +1,45 @@
 import React, {useContext, useEffect, useState} from 'react';
-import './bottombar.scss'
+import classes from './bottombar.module.scss'
 import PlaceIcon from "@mui/icons-material/Place";
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import LoginOutlinedIcon from '@mui/icons-material/LoginOutlined';
 import {Link, useLocation} from "react-router-dom";
-import {AuthContext} from "../../../context/authContext";
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import {Context} from "../../../index";
+import {observer} from "mobx-react-lite";
 
-const Bottombar = () => {
-    const {currentUser} = useContext(AuthContext);
+const Bottombar =observer( () => {
+    const {user} = useContext(Context)
     const location = useLocation();
     const currentPath = location.pathname;
 
-    const isLogin = () => {
-        return false
-    }
+
+
 
     return (
-        <div className={"bottombar"}>
-            <Link to={"/"} className={"bottomRoute"} id={currentPath === "/" ? "current": undefined}>
+        <div className={classes.bottombar}>
+            <Link to={"/"} className={classes.bottomRoute} id={currentPath === "/" ? classes.current: undefined}>
                 <HomeOutlinedIcon/>
                 главная
             </Link>
-            <Link to={"/map"} className={"bottomRoute"} id={currentPath === "/map" ? "current" : undefined}>
+            <Link to={"/map"} className={classes.bottomRoute} id={currentPath === "/map" ? classes.current : undefined}>
                 <PlaceIcon/>
                 где сдать?
             </Link>
-            {isLogin()
+            {user.isAuth
                 ?
-                <Link to={"/account"} className={"bottomRoute"} id={currentPath === "/account" ? "current" : undefined}>
+                <Link to={"/home"} className={classes.bottomRoute} id={currentPath === "/home" ? classes.current : undefined}>
                     <AccountCircleOutlinedIcon/>
                     аккаунт
                 </Link>
                 :
-                <Link to={"/login"} className={"bottomRoute"} id={(currentPath === "/login" || currentPath === "/reg") ? "current" : undefined}>
+                <Link to={"/login"} className={classes.bottomRoute} id={(currentPath === "/login" || currentPath === "/reg") ? classes.current : undefined}>
                     <LoginOutlinedIcon/>
                     войти
                 </Link>
             }
         </div>
     );
-};
+});
 
 export default Bottombar;

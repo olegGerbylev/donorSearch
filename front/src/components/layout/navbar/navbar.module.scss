@@ -1,0 +1,111 @@
+@import url('https://fonts.googleapis.com/css?family=Allerta+Stencil');
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 80px;
+  height: 75px;
+  border-bottom: 1px solid lightgray;
+  //background-color: #ffff;
+  color:#555555;
+  font-family: Inter,Arial,sans-serif;
+
+
+  .container{
+    width: 100%;
+    max-width: 1400px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .left {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+
+      .logo{
+        cursor: pointer;
+        text-align: center;
+        color: #f73232;
+        font-family: 'Allerta Stencil', cursive;
+        font-size: 42px;
+        text-decoration: none;
+      }
+
+      .logoTeg{
+        font-family: Inter, Arial, sans-serif;
+        color: black;
+        font-size: 12px;
+      }
+    }
+
+
+    #route{
+      @media (max-width: 960px) {
+        display: none;
+      }
+    }
+
+    .right {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+
+      .catImg{
+        z-index: -1;
+        height: 197px;
+        position: relative;
+        transform: translate(50px, 60px);
+        //top: 0;
+        //left: 0;
+      }
+
+      @media (max-width: 960px) {
+        display: none;
+      }
+      .photo{
+        display: flex;
+        color: #f73232;
+        height: 42px;
+        width: 42px;
+        border-radius: 50%;
+        border: 1px solid #f73232;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .linkToMap{
+        color: #555555;
+        cursor: pointer;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .loginButton{
+        cursor: pointer;
+        background-color: #f73232;
+        font-weight: 900;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        border-radius: 5px;
+        height: 36px;
+        width: 65px;
+        border: #f73232 solid 1px;
+      }
+      .loginButton:hover{
+        background-color: white;
+        color: #f73232;
+      }
+    }
+    .profileImg{
+      border-radius: 50%;
+      height: 44px;
+      width: 44px;
+    }
+  }
+}

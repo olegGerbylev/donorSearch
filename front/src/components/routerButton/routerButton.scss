@@ -1,9 +1,0 @@
-@import "../../style";
-.routerButton{
-  @include themify($themes){
-    cursor: pointer;
-    color: themed("textColor");
-    font-family: Inter,Arial,sans-serif;
-    text-decoration: none;
-  }
-}

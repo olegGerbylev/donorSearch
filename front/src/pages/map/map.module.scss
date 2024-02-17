@@ -1,0 +1,8 @@
+
+.bottomIndent{
+  display: none;
+  @media (max-width: 960px) {
+    height: 57px;
+    display: block;
+  }
+}

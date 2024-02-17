@@ -12,41 +12,72 @@ paths:
   # *******************************************************************************
   #                           Account
   # *******************************************************************************
-  #  /api/getAccount:
-  #    get:
-  #      operationId: getAccount
-  #      tags:
-  #        - Account
-  #      responses:
-  #        '200':
-  #          description: Result
-  #          content:
-  #            application/json:
-  #              schema:
-  #                type: array
-  #                items:
-  #                  $ref: '#/components/schemas/AccountData'
-  #
-  #  /api/getFeatures:
-  #    post:
-  #      operationId: getFeatures
-  #      tags:
-  #        - Account
-  #      requestBody:
-  #        required: true
-  #        content:
-  #          application/json:
-  #            schema:
-  #              $ref: '#/components/schemas/AccountData'
-  #      responses:
-  #        '200':
-  #          description: Result
-  #          content:
-  #            application/json:
-  #              schema:
-  #                type: array
-  #                items:
-  #                  $ref: '#/components/schemas/Feature'
+  /api/account/:
+    get:
+      operationId: listAccounts
+      parameters:
+        - $ref: '#/components/parameters/page-q'
+        - $ref: '#/components/parameters/pageSize-q'
+      tags:
+        - Account
+      responses:
+        '200':
+          description: Result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountPaginationListData'
+    post:
+      operationId: createAccount
+      tags:
+        - Account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountRegisterData'
+      responses:
+        '200':
+          description: Result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountData'
+
+  /api/account/{accountId}:
+    get:
+      operationId: getAccount
+      parameters:
+        - $ref: '#/components/parameters/accountId'
+      tags:
+        - Account
+      responses:
+        '200':
+          description: Result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountData'
+    post:
+      operationId: updateAccount
+      parameters:
+        - $ref: '#/components/parameters/accountId'
+      tags:
+        - Account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountData'
+      responses:
+        '200':
+          description: Result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountData'
 
   # *******************************************************************************
   #                           Auth
@@ -65,6 +96,7 @@ paths:
       responses:
         '200':
           description: Result
+
   /api/checkSession:
     post:
       operationId: checkSession
@@ -170,6 +202,12 @@ paths:
       responses:
         '200':
           description: Result
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MapPointData'
     put:
       operationId: editPoint
       tags:
@@ -183,6 +221,11 @@ paths:
       responses:
         '200':
           description: Result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MapPointerFullInfoData'
+
 
   /api/deleteMapPoint:
     post:
@@ -200,8 +243,171 @@ paths:
           description: Result
 
   # *******************************************************************************
-  #                           Form
+  #                           Pet
   # *******************************************************************************
+  /api/{petId}/pets/:
+    get:
+      operationId: getPets
+      parameters:
+        - $ref: '#/components/parameters/petId'
+      tags:
+        - Pet
+      responses:
+        '200':
+          description: Result
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PetData'
+    post:
+      operationId: createPet
+      parameters:
+        - $ref: '#/components/parameters/petId'
+      tags:
+        - Pet
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePetData'
+      responses:
+        '200':
+          description: Result
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PetData'
+
+  /api/pet/{petId}:
+    put:
+      operationId: updatePet
+      parameters:
+        - $ref: '#/components/parameters/petId'
+      tags:
+        - Pet
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PetData'
+      responses:
+        '200':
+          description: Result
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PetData'
+    post:
+      operationId: addDonation
+      parameters:
+        - $ref: '#/components/parameters/petId'
+      tags:
+        - Pet
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DonationData'
+      responses:
+        '200':
+          description: Result
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PetData'
+
+  /api/pet/{petId}/confirm:
+    get:
+      operationId: confirmPets
+      parameters:
+        - $ref: '#/components/parameters/petId'
+      tags:
+        - Pet
+      responses:
+        '200':
+          description: Result
+
+  # *******************************************************************************
+  #                           News
+  # *******************************************************************************
+
+  /api/news/:
+    get:
+      operationId: listNews
+      parameters:
+        - $ref: '#/components/parameters/page-q'
+        - $ref: '#/components/parameters/pageSize-q'
+      tags:
+        - News
+      responses:
+        '200':
+          description: Result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsPaginationListData'
+    post:
+      operationId: createNews
+      tags:
+        - News
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewsFullData'
+      responses:
+        '200':
+          description: Result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsFullData'
+
+  /api/news/{newsId}:
+    get:
+      operationId: getNews
+      parameters:
+        - $ref: '#/components/parameters/newsId'
+      tags:
+        - News
+      responses:
+        '200':
+          description: Result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsFullData'
+    post:
+      operationId: updateNews
+      parameters:
+        - $ref: '#/components/parameters/newsId'
+      tags:
+        - News
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewsFullData'
+      responses:
+        '200':
+          description: Result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsFullData'
 
 
 components:
@@ -214,12 +420,158 @@ components:
       schema:
         type: string
 
+    accountId:
+      name: accountId
+      in: path
+      description: Account identifier.
+      required: true
+      schema:
+        type: integer
+        format: int64
+
+    page-q:
+      name: page
+      in: query
+      description: Page number.
+      required: false
+      schema:
+        type: integer
+    pageSize-q:
+      name: pageSize
+      in: query
+      description: Page size.
+      required: false
+      schema:
+        type: integer
+
+    petId:
+      name: petId
+      in: path
+      description: pet identifier.
+      required: true
+      schema:
+        type: integer
+        format: int64
+
+    newsId:
+      name: newsId
+      in: path
+      description: news identifier.
+      required: true
+      schema:
+        type: integer
+        format: int64
+
   schemas:
+
+    NewsPaginationListData:
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/NewsData'
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        totalCount:
+          type: integer
+
+
+    AccountPaginationListData:
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountData'
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        totalCount:
+          type: integer
+
+    NewsData:
+      properties:
+        id:
+          type: integer
+          format: int64
+        label:
+          type: string
+        photo:
+          type: object
+        summer:
+          type: string
+        theme:
+          type: string
+        data:
+          type: string
+
+    NewsFullData:
+      properties:
+        newsData:
+          $ref: '#/components/schemas/NewsData'
+        text:
+          type: string
+
+    PetData:
+      properties:
+        id:
+          type: integer
+          format: int64
+        accountId:
+          type: integer
+          format: int64
+        petType:
+          type: string
+          enum:
+            - cat
+            - dog
+        confirmed:
+          type: boolean
+        age:
+          type: integer
+        weight:
+          type: integer
+        name:
+          type: string
+        photo:
+          type: object
+        passport:
+          type: object
+        donations:
+          type: array
+          items:
+            $ref: '#/components/schemas/DonationData'
+
+    CreatePetData:
+      properties:
+        accountId:
+          type: integer
+          format: int64
+        petType:
+          type: string
+          enum:
+            - cat
+            - dog
+        name:
+          type: string
+
+    DonationData:
+      properties:
+        id:
+          type: integer
+          format: int64
+        data:
+          type: string
+
+
+
     AccountRegisterData:
       properties:
         displayName:
           type: string
-        email:
+        login:
           type: string
         password:
           type: string
@@ -262,15 +614,6 @@ components:
         photo:
           type: string
 
-    Feature:
-      properties:
-        id:
-          type: integer
-          format: int64
-        feature:
-          type: string
-
-
     SessionInfoData:
       properties:
         sessionId:
@@ -278,15 +621,11 @@ components:
         accountId:
           type: integer
           format: int64
-        superAdmin:
-          type: boolean
-        permission:
+        role:
           type: string
-        #        features:
-        #          type: array
-        #          items:
-        #            $ref: "#/components/schemas/Feature"
         displayName:
+          type: string
+        login:
           type: string
 
     AccountData:
@@ -296,22 +635,22 @@ components:
           format: int64
         displayName:
           type: string
-        superAdmin:
-          type: boolean
         active:
           type: boolean
-        permission:
-          type: string
         confirmed:
           type: boolean
+        role:
+          type: string
+        phone:
+          type: string
+        city:
+          type: string
+        bio:
+          type: string
+        photo:
+          type: object
 
-  #    FType:
-  #      type: string
-  #      enum:
-  #        - user
-  #        - admin
-  #        - superAdmin
-  #        - reception
+
 
   securitySchemes:
     bearerAuth:

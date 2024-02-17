@@ -35,13 +35,12 @@ class MapApiValidator(
 
     fun validateMapPointId(data: MapPointData){
         Validator(data){
-            isNotNullOrEmpty("id")
             isNotNullOrEmpty("tal")
             isNotNullOrEmpty("lng")
         }
         Validator(data){
-            if (mapPointerRepository.getPositionByIdTalLng(data.id!!, data.tal!!, data.lng!!) == null){
-                error("id", ApiErrorCode.POSITION_NOT_EXIST)
+            if (mapPointerRepository.getPositionByTalLng( data.tal!!, data.lng!!) == null){
+                error("position", ApiErrorCode.POSITION_NOT_EXIST)
             }
         }
     }

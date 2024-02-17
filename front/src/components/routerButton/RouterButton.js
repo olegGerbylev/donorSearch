@@ -1,11 +1,11 @@
 import React from 'react';
 import {Link} from "react-router-dom";
-import './routerButton.scss'
+import classes from'./routerButton.module.scss'
 
 const RouterButton = ({text, path, id}) => {
 
     return (
-        <Link to={path} className={"routerButton"} id={id}>
+        <Link to={path} className={classes.routerButton} id={id}>
             {text}
         </Link>
     );

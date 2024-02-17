@@ -1,20 +1,13 @@
-import "./navbar.scss";
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
-import WbSunnyOutlinedIcon from "@mui/icons-material/WbSunnyOutlined";
-import GridViewOutlinedIcon from "@mui/icons-material/GridViewOutlined";
-import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
-import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
-import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
-import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
-import { Link } from "react-router-dom";
+import classes from "./navbar.module.scss";
+import {Link, useNavigate} from "react-router-dom";
 import {ReactComponent as Logo} from '../../../media/logo.svg';
-import { useContext } from "react";
-import { DarkModeContext } from "../../../context/darkModeContext";
-import { AuthContext } from "../../../context/authContext";
+import {useContext, useEffect} from "react";
 import RouterButton from "../../routerButton/RouterButton";
 import PlaceIcon from '@mui/icons-material/Place';
 import DropDown from "../../dropDown/DropDown";
+import LocalSeeOutlinedIcon from '@mui/icons-material/LocalSeeOutlined';
+import {Context} from "../../../index";
+import {observer} from "mobx-react-lite";
 
 
 const options = [
@@ -24,49 +17,50 @@ const options = [
 ];
 
 
-const Navbar = () => {
-    // const { toggle, darkMode } = useContext(DarkModeContext);
-    // const { currentUser } = useContext(AuthContext);
+const Navbar = observer(({type}) => {
 
-    const {currentUser} = useContext(AuthContext);
-
+    const {user} = useContext(Context)
+    const navigate = useNavigate()
     const handleSelect = (option) => {
         console.log('Selected option:', option);
-        // Ваша логика обработки выбора опции
     };
 
-    const isLogin = () => {
-        return false
-    }
 
     return (
-        <div className={"navbar"}>
-            <div className={"container"}>
-                <div className={"left"}>
-                    <Link to="/fdsf">
-                        <Logo/>
+        <div className={classes.navbar}>
+            <div className={classes.container}>
+                <div className={classes.left}>
+                    <Link to="/" className={classes.logo}>
+                        YPI
+                        <div className={classes.logoTeg}>
+                            #YourPetsSuperHero
+                        </div>
                     </Link>
-                    <RouterButton text={"Кто может стать донором?"} path={"/info"} id={"route"}/>
-                    <RouterButton text={"Бонусы для доноров"} path={"/about"} id={"route"}/>
-                    {/*<div>*/}
-                    {/*    <DropDown options={options} onSelect={handleSelect} />*/}
-                    {/*</div>*/}
                 </div>
-                <div className={"right"}>
-                    <Link to={"/map"} className={"linkToMap"}>
-                        где сдать кровь?
-                        <PlaceIcon/>
-                    </Link>
-                    {isLogin()
-                        ?
-                        <div>Тут типо фото...</div>
-                        :
-                        <div className={"loginButton"}>войти</div>
-                    }
-                </div>
+                {type === "max" &&
+                    <div className={classes.right}>
+                        <img src={require('../../../media/superCat.png')} className={classes.catImg}/>
+                        <Link to={"/map"} className={classes.linkToMap}>
+                            где сдать кровь?
+                            <PlaceIcon/>
+                        </Link>
+                        {user.isAuth
+                            ?
+                            <div onClick={()=>{navigate('/home')}} className={classes.photo}>
+                                {user.photo ?
+                                    <img src={require('../../../media/img2.png')} className={classes.profileImg}/>
+                                    :
+                                    <LocalSeeOutlinedIcon/>
+                                }
+                            </div>
+                            :
+                            <div className={classes.loginButton} onClick={(e)=>navigate('/login')}>войти</div>
+                        }
+                    </div>
+                }
             </div>
         </div>
     );
-};
+});
 
 export default Navbar;

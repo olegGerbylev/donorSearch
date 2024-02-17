@@ -1,26 +1,30 @@
 CREATE TABLE accounts(
     id  BIGINT  NOT NULL PRIMARY KEY,
 
-    display_name    TEXT NOT NULL,
     email   TEXT    NOT NULL,
     password    TEXT    NOT NULL,
 
     active BOOLEAN NOT NULL DEFAULT TRUE,
     confirmed BOOLEAN NOT NULL DEFAULT FALSE,
 
-    permission TEXT NOT NULL DEFAULT 'user',
+    role TEXT NOT NULL DEFAULT 'user',
 
-    last_active TIMESTAMP NOT NULL,
-    creation_date TIMESTAMP NOT NULL
+    creation_date TIMESTAMP NOT NULL,
+
+    display_name    TEXT NOT NULL,
+    photo TEXT,
+    phone TEXT,
+    city TEXT,
+    bio TEXT
 );
 
 CREATE SEQUENCE account_id_seq
     START 1;
 
-CREATE TABLE token_confirmation(
+CREATE TABLE tokens_confirmation(
     id BIGINT NOT NULL,
     token   text    NOT NULL PRIMARY KEY UNIQUE,
-    expire_time TIMESTAMP NOT NULL,
+    deleted_ts TIMESTAMP NOT NULL,
     FOREIGN KEY (id) REFERENCES accounts(id) ON DELETE CASCADE
 );
 
@@ -29,7 +33,7 @@ CREATE TABLE sessions(
     session_id  TEXT NOT NULL PRIMARY KEY,
     account_id BIGINT NOT NULL,
 
-    super_admin BOOLEAN NOT NULL DEFAULT FALSE,
+--    super_admin BOOLEAN NOT NULL DEFAULT FALSE,
 
     deleted_ts TIMESTAMP NOT NULL,
     creation_date TIMESTAMP NOT NULL,
@@ -47,39 +51,70 @@ CREATE SEQUENCE map_point_id_seq
 
 CREATE TABLE map_point_info(
     id BIGINT NOT NULL,
-    name VARCHAR(255) NOT NULL,
-    address VARCHAR(255) NOT NULL,
-    phone VARCHAR(25) NOT NULL,
+    name TEXT NOT NULL,
+    address TEXT NOT NULL,
+    phone TEXT NOT NULL,
     info TEXT,
     important TEXT,
-    time VARCHAR(50),
-    photo VARCHAR(255)
+    photo TEXT,
+    FOREIGN KEY (id) REFERENCES map_points(id) ON DELETE CASCADE
 );
 
+CREATE TABLE map_point_work_time(
+    id BIGINT NOT NULL,
+    mon TEXT,
+    tue TEXT,
+    wed TEXT,
+    thu TEXT,
+    fri TEXT,
+    sat TEXT,
+    sun TEXT,
+    FOREIGN KEY (id) REFERENCES map_points(id) ON DELETE CASCADE
+);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-CREATE TABLE features(
+CREATE TABLE pets(
     id BIGINT PRIMARY KEY,
-    feature TEXT NOT NULL
+    account_id BIGINT NOT NULL,
+    type TEXT NOT NULL,
+    confirmed BOOLEAN DEFAULT FALSE,
+    age INT,
+    weight INT,
+    name TEXT,
+    photo TEXT,
+    passport TEXT,
+    FOREIGN KEY (account_id) REFERENCES accounts(id)
 );
 
+CREATE SEQUENCE pet_id_seq
+    START 1;
 
-CREATE TABLE account_features(
-    account_id BIGINT NOT NULL REFERENCES accounts ON DELETE CASCADE,
-    feature_id BIGINT NOT NULL REFERENCES features ON DELETE CASCADE,
+CREATE TABLE pet_donations(
+    id BIGINT PRIMARY KEY,
+    pet_id BIGINT NOT NULL,
+    point_id BIGINT NOT NULL,
 
-    PRIMARY KEY(account_id, feature_id)
+    donation_data TIMESTAMP NOT NULL,
+
+    FOREIGN KEY (pet_id) REFERENCES pets(id)
 );
+
+CREATE SEQUENCE pet_donations_id_seq
+    START 1;
+
+CREATE TABLE news(
+    id BIGINT NOT NULL PRIMARY KEY,
+    label TEXT NOT NULL,
+    photo TEXT,
+    summer TEXT NOT NULL,
+    theme TEXT NOT NULL,
+    creation_ts TIMESTAMP NOT NULL
+);
+
+CREATE TABLE news_text(
+    news_id BIGINT NOT NULL,
+    main_text TEXT NOT NULL,
+    FOREIGN KEY (news_id) REFERENCES news(id) ON DELETE CASCADE
+);
+
+CREATE SEQUENCE news_id_seq
+    START 1;

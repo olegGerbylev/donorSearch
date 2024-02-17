@@ -122,7 +122,7 @@ enum class ApiErrorCode (val message: String, val status: HttpStatus, val dbErro
     ),
 
     VALIDATION_MUST_NOT_BE_NULL_AND_EMPTY(
-            "Поле является обязательным и не должно быть пустой строкой",
+            "Поле является обязательным",
             HttpStatus.BAD_REQUEST
     ),
 

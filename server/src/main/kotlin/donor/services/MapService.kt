@@ -13,9 +13,10 @@ class MapService(
     private val mapPointInfoRepository: MapPointInfoRepository,
 ){
 
-    fun editMapPoint(mapPointerFullInfoData: MapPointerFullInfoData){
+    fun editMapPoint(mapPointerFullInfoData: MapPointerFullInfoData): MapPointerFullInfoData{
         val editPoint = mapPointerFullInfoData.toDB(id = null)
         mapPointInfoRepository.save(editPoint)
+        return editPoint.toApi(mapPointerFullInfoData.mapPoint!!.toDB(id = null))
     }
 
     fun createNewPoint(mapPointerFullInfoData: MapPointerFullInfoData){
@@ -31,13 +32,13 @@ class MapService(
     }
 
     fun getPointInfo(mapPointData: MapPointData):MapPointerFullInfoData{
-        val mapPoint = mapPointRepository.findById(mapPointData.id!!).get()
-        val mapPointInfo = mapPointInfoRepository.getPointInfo(mapPointData.id) ?: throw WebException(ApiErrorCode.SOMETHING_GO_WRONG)
+        val mapPoint = mapPointRepository.getPositionByTalLng(mapPointData.tal!!, mapPointData.lng!!) ?: throw WebException(ApiErrorCode.POSITION_NOT_EXIST)
+        val mapPointInfo = mapPointInfoRepository.getPointInfo(mapPoint.id) ?: throw WebException(ApiErrorCode.SOMETHING_GO_WRONG)
         return mapPointInfo.toApi(mapPoint)
     }
 
     fun deleteMapPoint(mapPointData: MapPointData){
-        val mapPoint = mapPointRepository.findById(mapPointData.id!!).get()
+        val mapPoint = mapPointRepository.getPositionByTalLng(mapPointData.tal!!,mapPointData.lng!!)?:throw WebException(ApiErrorCode.INTERNAL_SERVER_ERROR)
         mapPointRepository.delete(mapPoint)
     }
 }

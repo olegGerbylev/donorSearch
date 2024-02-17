@@ -6,6 +6,7 @@ import donor.endpoints.errors.ApiErrorCode
 import donor.endpoints.errors.WebException
 import donor.utils.ClockHolder
 import org.apache.commons.lang3.RandomStringUtils
+import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.security.authentication.AnonymousAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
@@ -45,8 +46,8 @@ class SessionService (
     }
 
     fun isSuperAdmin():Boolean{
-        val session = getCurrentSession() ?: throw WebException(ApiErrorCode.NO_PERMISSION, mapOf("permission" to "supperAdmin"))
-        if (session.accountId == AccountRepository.SUPER_ADMIN_ID && session.deletedTs > ClockHolder.instantNow()) return true
+        val session = getCurrentSessionReq()
+        if (session.accountId == AccountRepository.SUPER_ADMIN_ID) return true
         throw WebException(ApiErrorCode.NO_PERMISSION, mapOf("permission" to "supperAdmin"))
     }
 
@@ -61,7 +62,18 @@ class SessionService (
         if (securityContext.authentication is AnonymousAuthenticationToken) {
             return null
         }
-        return securityContext.authentication.credentials as Session? ?: return null;
+        val session = securityContext.authentication.credentials as Session? ?: return null
+        if (session.deletedTs < ClockHolder.instantNow()){
+            return null
+        }
+        return session
+    }
 
+
+    @Scheduled(cron = "0 0 0 * * *")
+    fun jobCleanConfirmationsExpired(){
+        val ucsExpired = sessions.findExpired(ClockHolder.instantNow(), 100)
+        if (ucsExpired.isEmpty()) return
+        sessions.deleteAll(ucsExpired)
     }
 }

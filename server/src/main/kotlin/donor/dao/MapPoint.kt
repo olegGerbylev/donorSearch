@@ -21,8 +21,8 @@ interface MapPointerRepository: JpaRepository<MapPoint, Long>{
     @Query("SELECT * FROM map_points", nativeQuery = true)
     fun getAllPoints(): List<MapPoint>
 
-    @Query("SELECT * FROM map_points WHERE id=:id AND tal=:tal AND lng=:lng", nativeQuery = true)
-    fun getPositionByIdTalLng(id: Long, tal: Double, lng: Double): MapPoint?
+    @Query("SELECT * FROM map_points WHERE tal=:tal AND lng=:lng", nativeQuery = true)
+    fun getPositionByTalLng(tal: Double, lng: Double): MapPoint?
 }
 
 fun MapPointData.toDB(id: Long?):MapPoint{

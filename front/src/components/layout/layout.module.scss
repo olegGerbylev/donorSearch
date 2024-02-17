@@ -1,0 +1,18 @@
+.mainContentContainer{
+  margin: auto;
+  //display: flex;
+  //background-color: #F6F7F8;
+  font-family: Inter, Arial, sans-serif;
+  max-width: 1400px;
+
+}
+
+.helper{
+  height: 57px;
+  width: 100%;
+  display: none;
+
+  @media (max-width: 960px) {
+    display: block;
+  }
+}

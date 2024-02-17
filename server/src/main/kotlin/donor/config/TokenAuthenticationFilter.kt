@@ -38,11 +38,9 @@ class TokenAuthenticationFilter(
 
         if (authToken != null && SecurityContextHolder.getContext().authentication == null){
             val foundUser = account.findById(authToken.accountId).orElse(null) ?: return throwError(request, filterChain, response, ApiErrorCode.INVALID_ACCESS_TOKEN_FOR_ACCOUNT)
-
             updateContext(foundUser, request, authToken)
         }
-            filterChain.doFilter(request, response)
-
+        filterChain.doFilter(request, response)
     }
 
     private fun throwError(request: HttpServletRequest, filterChain: FilterChain, response: HttpServletResponse, error: ApiErrorCode) {

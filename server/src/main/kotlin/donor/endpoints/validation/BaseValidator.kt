@@ -162,22 +162,18 @@ class Validator(val data: Any) {
                     t?.let { getValue(second, it) }
                 }
             }
-
             field.indexOf(".") == -1 -> {
                 val f = data.javaClass.getDeclaredField(field)
                 f.isAccessible = true
                 return f.get(data)
             }
-
             else -> {
                 val i = field.indexOf(".")
                 val first = field.substring(0, i)
                 val second = field.substring(i + 1, field.length)
-
                 val f = data.javaClass.getDeclaredField(first)
                 f.isAccessible = true
                 val v = f.get(data)
-
                 return getValue(second, v)
             }
         }
